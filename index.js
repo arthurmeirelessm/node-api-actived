@@ -17,6 +17,7 @@ const specialtys = ['Cardiologist', 'Ophthalmologist', 'Pediatrician', 'Surgeon'
 //})
 
 
+//Middleware
 const checkSpecialty = (req, res, next) => {
     if (!req.body.name) {
         return res.status(400).json({ Error: "Specialty name cannot be empty" })
@@ -24,12 +25,20 @@ const checkSpecialty = (req, res, next) => {
     return next()
 }
 
+//Middleware
+const CheckIdSpecialty = (req, res, next) => {
+    if (!specialtys[req.params.index]) {
+        return res.status(400).json({ Error: "Specialty id cannot be empty" })
+    }
+
+    return next()
+}
 
 server.get('/specialtys', (req, res) => {
     return res.json(specialtys)
 })
 
-server.get('/specialtys/:index', (req, res) => {
+server.get('/specialtys/:index', CheckIdSpecialty, (req, res) => {
     const index = req.params.index
     return res.json(specialtys[index])
 })
@@ -40,7 +49,7 @@ server.post('/specialtys', checkSpecialty, (req, res) => {
     return res.json(specialtys)
 })
 
-server.put('/specialtys/:index', (req, res) => {
+server.put('/specialtys/:index', checkSpecialty, CheckIdSpecialty, (req, res) => {
     const index = req.params.index
     const nameOfSpecialty = req.body.name
 
@@ -49,7 +58,7 @@ server.put('/specialtys/:index', (req, res) => {
     return res.json(specialtys)
 })
 
-server.delete('/specialtys/:index', (req, res) => {
+server.delete('/specialtys/:index', CheckIdSpecialty, (req, res) => {
     const index = req.params.index
     specialtys.splice(index, 1)
 

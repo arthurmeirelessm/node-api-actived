@@ -11,6 +11,20 @@ server.use(express.json())
 const specialtys = ['Cardiologist', 'Ophthalmologist', 'Pediatrician', 'Surgeon', 'Dentist']
 
 
+//server.use((req, res, next) => {
+// console.log(`STOP ENDPOINT ${req.url}`)
+//return next();
+//})
+
+
+const checkSpecialty = (req, res, next) => {
+    if (!req.body.name) {
+        return res.status(400).json({ Error: "Specialty name cannot be empty" })
+    }
+    return next()
+}
+
+
 server.get('/specialtys', (req, res) => {
     return res.json(specialtys)
 })
@@ -20,7 +34,7 @@ server.get('/specialtys/:index', (req, res) => {
     return res.json(specialtys[index])
 })
 
-server.post('/specialtys', (req, res) => {
+server.post('/specialtys', checkSpecialty, (req, res) => {
     const nameOfSpecialtysReq = req.body.name
     specialtys.push(nameOfSpecialtysReq)
     return res.json(specialtys)

@@ -22,9 +22,26 @@ server.get('/specialtys/:index', (req, res) => {
 
 server.post('/specialtys', (req, res) => {
     const nameOfSpecialtysReq = req.body.name
-     specialtys.push(nameOfSpecialtysReq)
-     return res.json(specialtys)
+    specialtys.push(nameOfSpecialtysReq)
+    return res.json(specialtys)
 })
+
+server.put('/specialtys/:index', (req, res) => {
+    const index = req.params.index
+    const nameOfSpecialty = req.body.name
+
+    specialtys[index] = nameOfSpecialty
+
+    return res.json(specialtys)
+})
+
+server.delete('/specialtys/:index', (req, res) => {
+    const index = req.params.index
+    specialtys.splice(index, 1)
+
+    return res.json(specialtys)
+})
+
 
 server.listen(3000)
 
